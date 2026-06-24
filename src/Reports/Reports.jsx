@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Reports.css";
 
 function Reports() {
@@ -27,12 +27,66 @@ function Reports() {
       generatedBy: "Admin",
       status: "Pending",
     },
+    {
+      id: 4,
+      reportName: "GST Report",
+      type: "Monthly",
+      date: "20-06-2026",
+      generatedBy: "Admin",
+      status: "Processing",
+    },
+    {
+      id: 5,
+      reportName: "Expense Report",
+      type: "Daily",
+      date: "19-06-2026",
+      generatedBy: "Manager",
+      status: "Failed",
+    },
   ];
+
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const recordsPerPage = 5;
+
+  // Search filter
+  const filteredReports = reports.filter((report) =>
+    report.reportName.toLowerCase().includes(search.toLowerCase()) ||
+    report.type.toLowerCase().includes(search.toLowerCase()) ||
+    report.date.includes(search) ||
+    report.generatedBy.toLowerCase().includes(search.toLowerCase()) ||
+    report.status.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Pagination
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+
+  const currentReports = filteredReports.slice(firstIndex, lastIndex);
+
+  const totalPages = Math.ceil(
+    filteredReports.length / recordsPerPage
+  );
 
   return (
     <div className="reports-container">
-      <h1>Reports List</h1>
+      <h2>Reports List</h2>
 
+      {/* Search */}
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="Search report, type, date, status..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
+      {/* Table */}
       <table className="reports-table">
         <thead>
           <tr>
@@ -46,18 +100,55 @@ function Reports() {
         </thead>
 
         <tbody>
-          {reports.map((report) => (
-            <tr key={report.id}>
-              <td>{report.id}</td>
-              <td>{report.reportName}</td>
-              <td>{report.type}</td>
-              <td>{report.date}</td>
-              <td>{report.generatedBy}</td>
-              <td>{report.status}</td>
+          {currentReports.length > 0 ? (
+            currentReports.map((report) => (
+              <tr key={report.id}>
+                <td>{report.id}</td>
+                <td>{report.reportName}</td>
+                <td>{report.type}</td>
+                <td>{report.date}</td>
+                <td>{report.generatedBy}</td>
+                <td>
+                  <span className={`status ${report.status.toLowerCase()}`}>
+                    {report.status}
+                  </span>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6">No reports found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
+
+      {/* Pagination */}
+      <div className="pagination">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            className={currentPage === index + 1 ? "active-page" : ""}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages || totalPages === 0}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

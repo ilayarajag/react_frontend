@@ -1,5 +1,6 @@
 .sales-container {
   padding: 20px;
+  text-align: center;
 }
 
 .sales-table {
@@ -12,7 +13,7 @@
 .sales-table td {
   border: 1px solid #ddd;
   padding: 12px;
-  text-align: left;
+  text-align: center;
 }
 
 .sales-table th {
@@ -26,4 +27,43 @@
 
 .sales-table tr:hover {
   background-color: #e8e8e8;
+}
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: right;
+  gap: 8px;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:hover {
+  background: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.active-page {
+  background: #007bff !important;
+  color: white;
+}
+
+.search-box {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.search-box input {
+  width: 250px;
+  padding: 8px;
 }

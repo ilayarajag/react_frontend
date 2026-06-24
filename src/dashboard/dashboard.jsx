@@ -3,6 +3,9 @@ import "./dashboard.css";
 import {
   BarChart,
   Bar,
+  PieChart,
+  Pie,
+  Cell,
   LineChart,
   Line,
   XAxis,
@@ -22,37 +25,24 @@ function Dashboard() {
     { month: "Jun", sales: 250000 },
   ];
 
+  const categoryData = [
+    { name: "Drinks", value: 400 },
+    { name: "Food", value: 300 },
+    { name: "Snacks", value: 200 },
+    { name: "Others", value: 100 },
+  ];
+
+  const COLORS = ["#3498db", "#2ecc71", "#f39c12", "#e74c3c"];
+
   return (
     <div className="dashboard">
-      <h5>POS Dashboard</h5>
+      {/* <h2>POS Dashboard</h2> */}
 
-      {/* Dashboard Cards */}
-      <div className="cards">
-        <div className="card">
-          <h3>Total Products</h3>
-          <p>150</p>
-        </div>
-
-        <div className="card">
-          <h3>Total Customers</h3>
-          <p>80</p>
-        </div>
-
-        <div className="card">
-          <h3>Today's Sales</h3>
-          <p>₹25,000</p>
-        </div>
-
-        <div className="card">
-          <h3>Total Orders</h3>
-          <p>45</p>
-        </div>
-      </div>
-
-      {/* Charts */}
       <div className="charts">
+
+        {/* Bar Chart */}
         <div className="chart-box">
-          <h2>Monthly Sales</h2>
+          <h3>Monthly Sales</h3>
 
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={salesData}>
@@ -65,24 +55,54 @@ function Dashboard() {
           </ResponsiveContainer>
         </div>
 
+        {/* Pie Diagram */}
         <div className="chart-box">
-          <h2>Sales Growth</h2>
+          <h3>Product Category</h3>
 
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={salesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+            <PieChart>
+              <Pie
+                data={categoryData}
+                cx="50%"
+                cy="50%"
+                outerRadius={100}
+                dataKey="value"
+                label
+              >
+                {categoryData.map((entry, index) => (
+                  <Cell
+                    key={index}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
               <Tooltip />
-              <Line 
-                type="monotone" 
-                dataKey="sales" 
-                stroke="#2ecc71"
-              />
-            </LineChart>
+            </PieChart>
           </ResponsiveContainer>
         </div>
+
       </div>
+
+      {/* Line Chart */}
+      <div className="chart-box">
+        <h3>Sales Growth</h3>
+
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={salesData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="sales"
+              stroke="#2ecc71"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
     </div>
   );
 }
